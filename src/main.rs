@@ -1,22 +1,16 @@
-use std::env;
-
 mod file_operations;
+mod lexer;
 mod help;
 
-
 fn main() -> std::io::Result<()> {
+    let input_path = file_operations::extract_input_path();
+    let content_lines = match file_operations::read_file(input_path.as_str()) {
+        Some(cl) => cl,
+        None => panic!("Some panic")
+    };
+    
+    lexer::process_line(content_lines[0].as_str());
 
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() < 2 {
-        println!("No input was providede!");
-        help::print_usage();
-
-        return Ok(());
-    }
-
-    let path: &str = args[1].as_str();
-    file_operations::read_file(path);
-
+    
     Ok(())
 }
